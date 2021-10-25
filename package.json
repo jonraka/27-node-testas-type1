@@ -1,0 +1,27 @@
+{
+  "name": "27-node-testas-type1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/express.js",
+  "scripts": {
+    "start": "nodemon ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonraka/27-node-testas-type1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jonraka/27-node-testas-type1/issues"
+  },
+  "homepage": "https://github.com/jonraka/27-node-testas-type1#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0"
+  }
+}
