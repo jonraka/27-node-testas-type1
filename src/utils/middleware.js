@@ -1,18 +1,49 @@
-// const { sendUserError } = require('./misc');
-const jwt = require('jsonwebtoken');
+const { sqlConnect } = require('../utils/db');
 
-const validateJwt = async (req, res, next) => {
-    const token = req.get('authorization')?.split(' ')?.[1];
-    // if(!token) return sendNotAuthorized res, "Not authorized");
-    if (!token) throw new Error('sfdhgasd jgasidosjso iasdg'); //TODO: fix
+const verifyToken = async (req, res, next) => {
+    const token = req.cookies?.['bills_access_token'];
+    if (!token) {
+        return res.redirect(
+            `/login?error=${encodeURIComponent('Please log in')}`
+        );
+    }
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, jwtData) => {
-        if (err || !jwtData.id) return sendNotAuthorized(res, 'Invalid token');
-        req.jwtData = jwtData;
-        next();
-    });
+    sqlConnect(
+        'query',
+        `SELECT *, TIMESTAMPDIFF(second, CURRENT_TIMESTAMP, expires_at) AS timeDiff
+        FROM access_tokens
+        LEFT JOIN users
+        ON users.id = access_tokens.user_id
+        WHERE token = ?`,
+        [token]
+    )
+        .then(([data]) => {
+            if (!data?.[0]) {
+                res.redirect(
+                    `/login?error=${encodeURIComponent('Please sign in')}`
+                );
+            } else if (data[0].timeDiff < 0) {
+                res.clearCookie('bills_access_token');
+                res.redirect(
+                    `/login?error=${encodeURIComponent('Session timed out')}`
+                );
+            } else {
+                req.userData = {
+                    user_id: data[0].user_id,
+                    full_name: data[0].full_name,
+                    email: data[0].email,
+                };
+                next();
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            res.redirect(
+                `/login?error=${encodeURIComponent('Internal Error')}`
+            );
+        });
 };
 
 module.exports = {
-    validateJwt,
+    verifyToken,
 };

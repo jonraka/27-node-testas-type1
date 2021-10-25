@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
     );
 
     if (validatorError)
-        return res.redirect(`/register?error=${encodeURI(validatorError)}`);
+        return res.redirect(`/register?error=${encodeURIComponent(validatorError)}`);
 
     const hashedPassword = await bcrypt.hash(validatedData.password, 10);
 
@@ -45,16 +45,16 @@ router.post('/', async (req, res) => {
             if (data.affectedRows > 0) {
                 res.redirect('/login?registered=1');
             } else {
-                res.redirect(`/register?error=${encodeURI('Internal Error')}`);
+                res.redirect(`/register?error=${encodeURIComponent('Internal Error')}`);
             }
         })
         .catch((err) => {
             if (err.errno === 1062)
                 return res.redirect(
-                    `/register?error=${encodeURI('User already exists')}`
+                    `/register?error=${encodeURIComponent('User already exists')}`
                 );
 
-            res.redirect(`/register?error=${encodeURI('Internal Error')}`);
+            res.redirect(`/register?error=${encodeURIComponent('Internal Error')}`);
         });
 });
 

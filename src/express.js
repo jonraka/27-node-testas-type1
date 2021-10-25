@@ -1,11 +1,14 @@
 process.env.TZ = 'UTC';
+require('dotenv').config();
+
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const path = require('path');
-require('dotenv').config();
+const cookieParser = require('cookie-parser')
 const { renderMessage } = require('./utils/misc');
 
+app.use(cookieParser())
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
