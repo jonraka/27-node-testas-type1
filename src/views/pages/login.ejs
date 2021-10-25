@@ -6,12 +6,12 @@
             id="form"
             method="post"
             action="login"
-            class="d-flex d-flex-column mw-500 mg-center"
+            class="d-flex flex-column mw-500 mg-center"
         >
             <label for="email" class="mg-top-5">Email</label>
-            <input type="email" name="email" id="email" />
+            <input type="email" name="email" id="email" required />
             <label for="password" class="mg-top-5">Password</label>
-            <input type="password" name="password" id="password" />
+            <input type="password" name="password" id="password" required />
             <input type="submit" value="Login" class="mg-top-5" />
             <p>Or <a href="register">Sign Up</a></p>
             <div id="warnings" class="warning mg-top-5"></div>

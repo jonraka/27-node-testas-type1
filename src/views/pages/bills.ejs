@@ -1,0 +1,103 @@
+<%- include('../partials/head') %>
+
+<main>
+    <div class="container">
+        <h1 class="text-center">Bills</h1>
+        <div>
+            <div class="text-center">
+                <% if (!locals?.bills?.length) { %>
+                <h3>No Bills</h3>
+                <% } else { %>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Amount</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% locals.bills.forEach(bill => { %>
+                        <tr><td><%= bill.id %></td><td>€<%= Number(bill.amount) %></td><td><%= bill.description %></td></tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+                <% } %>
+            </div>
+            <hr />
+            <div>
+                <h2 class="text-center">Add A Bill</h2>
+                <div class="mg-center w-500">
+                    <form
+                        action="/bills"
+                        method="post"
+                        class="d-flex flex-column"
+                        id="form"
+                    >
+                        <input
+                            type="number"
+                            name="group_id"
+                            id="group_id"
+                            value="<%= locals.groupId %>"
+                            hidden
+                        />
+
+                        <label for="amount" class="mg-top-5">Amount</label
+                        ><br />
+                        <input
+                            type="number"
+                            name="amount"
+                            id="amount"
+                            step="any"
+                        /><br />
+                        <label for="description" class="mg-top-5"
+                            >Description</label
+                        ><br />
+                        <input
+                            type="text"
+                            name="description"
+                            id="description"
+                        /><br />
+
+                        <input type="submit" value="Add" class="mg-top-5" />
+                        <div id="warnings" class="warning mg-top-5"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    const formEl = document.getElementById('form');
+    const amountEl = document.getElementById('amount');
+    const descriptionEl = document.getElementById('description');
+    const warningEl = document.getElementById('warnings');
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const isItemAdded = urlParams.get('added');
+    if (isItemAdded) {
+        warningEl.innerText = 'Item added';
+    }
+    const errorsParam = urlParams.get('error');
+
+    if (errorsParam) warningEl.innerText = errorsParam;
+
+    formEl.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const errors = [];
+
+        const amount = Number(amountEl.value);
+        if (isNaN(amount) || amount < 0.01) errors.push('Invalid amount');
+        if (descriptionEl.value.length < 5 || descriptionEl.value > 50)
+            errors.push('Invalid description, must be between 5 and 50');
+
+        warningEl.innerText = errors.join('\n');
+
+        if (!errors.length) {
+            formEl.submit();
+        }
+    });
+</script>
+
+<%- include('../partials/foot') %>

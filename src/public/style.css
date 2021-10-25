@@ -42,7 +42,7 @@ input, select {
     display: flex;
 }
 
-.d-flex-column {
+.flex-column {
     flex-direction: column;
 }
 
@@ -114,4 +114,16 @@ option:disabled {
 option {
     background-color: black;
     color: white;
+}
+
+table {
+    width: 100%;
+}
+
+th {
+    background-color: grey;
+}
+
+td {
+   background-color: white; 
 }

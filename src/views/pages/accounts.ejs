@@ -2,7 +2,7 @@
 
 <main>
     <div class="container">
-        <h1 class="text-center">Accounts</h1>
+        <h1 class="text-center">Groups</h1>
         <div class="text-center">
             <div>
                 <% if (!locals?.userGroups?.length) { %>
@@ -17,7 +17,6 @@
             <hr />
             <div>
                 <h2>Add A Group</h2>
-                <%= JSON.stringify() %>
                 <div>
                     <form action="accounts" method="post">
                         <select name="group_id" class="w-500">
