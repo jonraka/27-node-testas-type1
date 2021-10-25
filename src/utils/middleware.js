@@ -1,4 +1,4 @@
-const { sendUserError } = require('./misc');
+// const { sendUserError } = require('./misc');
 const jwt = require('jsonwebtoken');
 
 const validateJwt = async (req, res, next) => {
@@ -13,14 +13,7 @@ const validateJwt = async (req, res, next) => {
 	});
 };
 
-function expressErrorHandle(errorMessage = 'error') {
-	return function HandleErr(err, req, res, next) {
-		if (err) return sendUserError(res, errorMessage);
-		next();
-	};
-}
 
 module.exports = {
-	validateJwt,
-	expressErrorHandle,
+	validateJwt
 };

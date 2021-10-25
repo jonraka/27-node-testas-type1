@@ -1,7 +1,7 @@
 <%- include('../partials/head') %>
 
 <main>
-	<section class="container">
+	<div class="container">
 		<form id="form" method="post" class="d-flex d-flex-column mw-500 mg-center">
 			<label for="fullname" class="mg-top-5">Full name</label>
 			<input type="text" name="fullname" id="fullname" />
@@ -14,7 +14,7 @@
 			<input type="submit" value="Register" class="mg-top-5" />
 			<div id="errors" class="warning"></div>
 		</form>
-	</section>
+	</div>
 </main>
 
 <script>
@@ -30,10 +30,17 @@
 	fullnameEl.value = sessionStorage.getItem('register_fullname') || '';
 	emailEl.value = sessionStorage.getItem('register_email') || '';
 
+	const urlParams = new URLSearchParams(window.location.search);
+	const errorParam = urlParams.get('error');
+	if (errorParam) errorsEl.innerText = errorParam;
+
 	formEl.addEventListener('submit', (e) => {
 		e.preventDefault();
 		const errors = [];
-		if (fullnameEl.value.length < 3 || !fullnameEl.value.includes(' '))
+		if (
+			fullnameEl.value.length < 3 ||
+			!/[a-zA-Z]+ [a-zA-Z]+/.test(fullnameEl.value)
+		)
 			errors.push('Invalid name, must be first and last name');
 		if (emailEl.value.length < 4 || !emailRegex.test(emailEl.value))
 			errors.push('Invalid email');
