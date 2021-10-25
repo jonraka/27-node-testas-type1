@@ -1,0 +1,41 @@
+<%- include('../partials/head') %>
+
+<main>
+    <div class="container">
+        <h1 class="text-center">Accounts</h1>
+        <div class="text-center">
+            <div>
+                <% if (!locals?.userGroups?.length) { %>
+                <h3>No Groups Added</h3>
+                <% } else { %> <% locals.userGroups.forEach(group => { %>
+                <a href="/bills/<%= group.group_id %>" class="card">
+                    <p>ID: <%= group.group_id %></p>
+                    <p><%= group.name %></p>
+                </a>
+                <% })} %>
+            </div>
+            <hr />
+            <div>
+                <h2>Add A Group</h2>
+                <%= JSON.stringify() %>
+                <div>
+                    <form action="accounts" method="post">
+                        <select name="group_id" class="w-500">
+                            <option value="0" selected disabled>
+                                Select a group
+                            </option>
+                            <% locals.allGroups.forEach(group => { %>
+                            <option value="<%= group.id %>" <%= ownedGroupIds.includes(group.id) ? "disabled" : "" %>>
+                                <%= `${group.id} - ${group.name}` %>
+                            </option>
+                            <% }) %></select
+                        ><br />
+                        <input type="submit" value="Add" class="w-500" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<%- include('../partials/foot') %>

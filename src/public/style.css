@@ -1,3 +1,7 @@
+html {
+    overflow-y: scroll;
+}
+
 * {
     box-sizing: border-box;
     padding: 0;
@@ -27,7 +31,7 @@ body {
     padding: 10px;
 }
 
-input {
+input, select {
     padding: 5px;
     border-radius: 5px;
     border: 1px solid rgb(202, 202, 202);
@@ -44,6 +48,10 @@ input {
 
 .mw-500 {
     max-width: 500px;
+}
+
+.w-500 {
+    width: 500px;
 }
 
 .justify-content-center {
@@ -78,4 +86,32 @@ input[type='buttom']:hover {
 
 a, a:active, a:visited {
     color: rgb(109, 71, 0);
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.493);
+    border-radius: 5px;
+    border: 1px solid white;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+    font-size: 2rem;
+    display: block;
+}
+
+.card {
+    text-decoration: none;
+}
+
+hr {
+    margin: 10px 0;
+}
+
+option:disabled {
+    color: grey
+}
+
+option {
+    background-color: black;
+    color: white;
 }

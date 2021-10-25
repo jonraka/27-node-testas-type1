@@ -18,7 +18,7 @@ const verifyToken = async (req, res, next) => {
         [token]
     )
         .then(([data]) => {
-            if (!data?.[0]) {
+            if (!data?.length) {
                 res.redirect(
                     `/login?error=${encodeURIComponent('Please sign in')}`
                 );

@@ -73,7 +73,7 @@ router.post('/', async (req, res) => {
             httpOnly: true,
         });
 
-        res.redirect('/groups');
+        res.redirect('/accounts');
     }).catch((err) => {
         console.log(err);
         res.redirect(`/login?error=${encodeURIComponent('Internal Error')}`);
