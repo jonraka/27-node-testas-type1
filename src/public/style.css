@@ -42,11 +42,11 @@ input {
     flex-direction: column;
 }
 
-.mw-500{
+.mw-500 {
     max-width: 500px;
 }
 
-.justify-content-center{
+.justify-content-center {
     justify-content: center;
 }
 
@@ -58,12 +58,14 @@ input {
     margin-top: 5px;
 }
 
-input[type="submit"], input[type="buttom"] {
+input[type='submit'],
+input[type='buttom'] {
     cursor: pointer;
     border: none;
 }
 
-input[type="submit"]:hover, input[type="buttom"]:hover {
+input[type='submit']:hover,
+input[type='buttom']:hover {
     background-color: rgb(155, 100, 0);
     color: white;
 }
@@ -72,4 +74,8 @@ input[type="submit"]:hover, input[type="buttom"]:hover {
     background-color: rgb(121, 44, 0);
     padding: 5px;
     color: white;
+}
+
+a, a:active, a:visited {
+    color: rgb(109, 71, 0);
 }
