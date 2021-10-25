@@ -12,17 +12,16 @@ const joiValidator = async (joiSchema, body) => {
 };
 
 /**
- * 
  * @param {expressResponse} res Express Response
  * @param {String} heading
  * @param {String} message
  * @param {Number} statusCode
  */
- const renderMessage = (res, heading = "", message = "", statusCode = 200) => {
-    res.status(statusCode).render("pages/message", [heading, message]);
-}
+const renderMessage = (res, heading = '', message = '', statusCode = 200) => {
+	res.status(statusCode).render('pages/message', [heading, message]);
+};
 
 module.exports = {
 	joiValidator,
-	renderMessage
+	renderMessage,
 };
