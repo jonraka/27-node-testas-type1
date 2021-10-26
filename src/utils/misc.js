@@ -8,7 +8,10 @@ const joiValidator = async (joiSchema, body) => {
     return joiSchema
         .validateAsync(body)
         .then((res) => [res, null])
-        .catch((err) => [null, err.message.replace(/"/g, '')]);
+        .catch((err) => [
+            null,
+            err?.message?.replace(/"/g, '') || 'Unknown error',
+        ]);
 };
 
 const renderMessage = (res, heading = '', message = '', statusCode = 200) => {

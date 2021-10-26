@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const joi = require('joi');
-const bcrypt = require('bcrypt');
-const { joiValidator, renderMessage } = require('../utils/misc');
+const { renderMessage } = require('../utils/misc');
 const { verifyToken } = require('../utils/middleware');
 const { sqlConnect, sqlConnectMulti } = require('../utils/db');
 
@@ -19,13 +17,13 @@ router.get('/', verifyToken, (req, res) => {
             [req.userData.user_id]
         );
 
-        console.log(userGroups)
-
         res.render('pages/accounts', {
             pageTitle: 'Groups',
             allGroups: allGroups || [],
             userGroups: userGroups || [],
-            ownedGroupIds: userGroups.map(account => account.group_id) || [],
+            ownedGroupIds: (userGroups || []).map(
+                (account) => account.group_id
+            ),
         });
     }).catch((err) => {
         console.log(err);
@@ -35,25 +33,36 @@ router.get('/', verifyToken, (req, res) => {
 
 router.post('/', verifyToken, async (req, res) => {
     const groupId = Number(req.body.group_id);
-    if (isNaN(groupId) || groupId < 1) return res.redirect('/accounts');
+    if (isNaN(groupId) || groupId < 1)
+        return res.redirect(
+            `/accounts?error=${encodeURIComponent('Invalid group id')}`
+        );
 
-    await sqlConnect(
+    sqlConnect(
         'execute',
         `INSERT INTO accounts (group_id, user_id) VALUES (?, ?)`,
         [groupId, req.userData.user_id]
     )
         .then(([insertedData]) => {
-            if (insertedData.affectedRows === 0) {
-                console.log('failed to add an account');
+            if (!insertedData?.affectedRows) {
+                throw new Error('fail');
             } else {
-                console.log('account added');
+                res.redirect('/accounts');
             }
         })
         .catch((err) => {
+            if (err.errno === 1062) {
+                return res.redirect(
+                    `/accounts?error=${encodeURIComponent(
+                        'Group already exists'
+                    )}`
+                );
+            }
             console.log(err);
+            res.redirect(
+                `/accounts?error=${encodeURIComponent('Failed to add a group')}`
+            );
         });
-
-    res.redirect('/accounts');
 });
 
 module.exports = router;

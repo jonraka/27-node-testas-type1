@@ -12,7 +12,7 @@ const newUserJoiSchema = joi.object({
         .pattern(/[a-zA-Z]+ [a-zA-Z ]+/)
         .required(),
     email: joi.string().min(4).email().required(),
-    password: joi.string().min(4).max(51).required(),
+    password: joi.string().min(5).max(50).required(),
     password2: joi.ref('password'),
 });
 
@@ -28,19 +28,18 @@ router.post('/', async (req, res) => {
         req.body
     );
 
-    if (validatorError)
+    if (validatorError) {
         return res.redirect(
             `/register?error=${encodeURIComponent(validatorError)}`
         );
+    }
 
     const hashedPassword = await bcrypt.hash(validatedData.password, 10);
 
     sqlConnect(
         'execute',
-        `
-        INSERT INTO users (full_name, email, password)
-        VALUES (?, ?, ?)
-    `,
+        `INSERT INTO users (full_name, email, password)
+        VALUES (?, ?, ?)`,
         [validatedData.fullname, validatedData.email, hashedPassword]
     )
         .then(([data]) => {

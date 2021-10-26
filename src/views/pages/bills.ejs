@@ -18,7 +18,11 @@
                     </thead>
                     <tbody>
                         <% locals.bills.forEach(bill => { %>
-                        <tr><td><%= bill.id %></td><td>€<%= Number(bill.amount) %></td><td><%= bill.description %></td></tr>
+                        <tr>
+                            <td><%= bill.id %></td>
+                            <td>€<%= Number(bill.amount) %></td>
+                            <td><%= bill.description %></td>
+                        </tr>
                         <% }) %>
                     </tbody>
                 </table>
@@ -41,24 +45,25 @@
                             value="<%= locals.groupId %>"
                             hidden
                         />
-
-                        <label for="amount" class="mg-top-5">Amount</label
-                        ><br />
+                        <label for="amount" class="mg-top-5">Amount</label>
+                        <br />
                         <input
                             type="number"
                             name="amount"
                             id="amount"
                             step="any"
-                        /><br />
+                        />
+                        <br />
                         <label for="description" class="mg-top-5"
                             >Description</label
-                        ><br />
+                        >
+                        <br />
                         <input
                             type="text"
                             name="description"
                             id="description"
-                        /><br />
-
+                        />
+                        <br />
                         <input type="submit" value="Add" class="mg-top-5" />
                         <div id="warnings" class="warning mg-top-5"></div>
                     </form>
@@ -80,21 +85,25 @@
         warningEl.innerText = 'Item added';
     }
     const errorsParam = urlParams.get('error');
-
-    if (errorsParam) warningEl.innerText = errorsParam;
+    if (errorsParam) {
+        warningEl.innerText = errorsParam;
+    }
 
     formEl.addEventListener('submit', (e) => {
         e.preventDefault();
         const errors = [];
 
         const amount = Number(amountEl.value);
-        if (isNaN(amount) || amount < 0.01) errors.push('Invalid amount');
-        if (descriptionEl.value.length < 5 || descriptionEl.value > 50)
+        if (isNaN(amount) || amount < 0.01) {
+            errors.push('Invalid amount');
+        }
+        if (descriptionEl.value.length < 5 || descriptionEl.value.length > 50) {
             errors.push('Invalid description, must be between 5 and 50');
+        }
 
-        warningEl.innerText = errors.join('\n');
-
-        if (!errors.length) {
+        if (errors.length) {
+            warningEl.innerText = errors.join('\n');
+        } else {
             formEl.submit();
         }
     });

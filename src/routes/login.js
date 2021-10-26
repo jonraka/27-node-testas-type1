@@ -4,7 +4,7 @@ const joi = require('joi');
 const bcrypt = require('bcrypt');
 const { joiValidator } = require('../utils/misc');
 const { nanoid } = require('nanoid');
-const { sqlConnect, sqlConnectMulti } = require('../utils/db');
+const { sqlConnectMulti } = require('../utils/db');
 
 const tokenExpireTime = Number(process.env.ACCESS_TOKEN_EXPIRE_MINUTES) || 10;
 

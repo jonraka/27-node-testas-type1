@@ -18,14 +18,12 @@ const verifyToken = async (req, res, next) => {
         [token]
     )
         .then(([data]) => {
-            if (!data?.length) {
-                res.redirect(
-                    `/login?error=${encodeURIComponent('Please sign in')}`
-                );
-            } else if (data[0].timeDiff < 0) {
+            if (!data.length || data[0].timeDiff < 0) {
                 res.clearCookie('bills_access_token');
                 res.redirect(
-                    `/login?error=${encodeURIComponent('Session timed out')}`
+                    `/login?error=${encodeURIComponent(
+                        'Session expired, please log in.'
+                    )}`
                 );
             } else {
                 req.userData = {

@@ -11,7 +11,14 @@
             <label for="email" class="mg-top-5">Email</label>
             <input type="email" name="email" id="email" required />
             <label for="password" class="mg-top-5">Password</label>
-            <input type="password" name="password" id="password" required />
+            <input
+                type="password"
+                name="password"
+                id="password"
+                minlength="5"
+                maxlength="50"
+                required
+            />
             <input type="submit" value="Login" class="mg-top-5" />
             <p>Or <a href="register">Sign Up</a></p>
             <div id="warnings" class="warning mg-top-5"></div>
@@ -27,27 +34,31 @@
     const passwordEl = document.getElementById('password');
     const warningEl = document.getElementById('warnings');
 
-    emailEl.value = sessionStorage.getItem('login_email') || '';
-
     const urlParams = new URLSearchParams(window.location.search);
     const didJustRegisterParam = urlParams.get('registered');
-    if (didJustRegisterParam)
+    if (didJustRegisterParam) {
         warningEl.innerText = 'Account created, please sign in.';
+    }
     const errorsParam = urlParams.get('error');
-    if (errorsParam) warningEl.innerText = errorsParam;
+    if (errorsParam) {
+        warningEl.innerText = errorsParam;
+        emailEl.value = sessionStorage.getItem('login_email') || '';
+    }
 
     formEl.addEventListener('submit', (e) => {
         e.preventDefault();
         const errors = [];
 
-        if (emailEl.value.length < 4 || !emailRegex.test(emailEl.value))
+        if (emailEl.value.length < 4 || !emailRegex.test(emailEl.value)) {
             errors.push('Invalid email');
-        if (passwordEl.value.length < 5 || passwordEl.value > 50)
+        }
+        if (passwordEl.value.length < 5 || passwordEl.value.length > 50) {
             errors.push('Invalid password, must be between 5 and 50');
+        }
 
-        warningEl.innerText = errors.join('\n');
-
-        if (!errors.length) {
+        if (errors.length) {
+            warningEl.innerText = errors.join('\n');
+        } else {
             sessionStorage.setItem('login_email', emailEl.value);
             formEl.submit();
         }

@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const joi = require('joi');
-const bcrypt = require('bcrypt');
 const { joiValidator, renderMessage } = require('../utils/misc');
 const { verifyToken } = require('../utils/middleware');
-const { sqlConnect, sqlConnectMulti } = require('../utils/db');
+const { sqlConnect } = require('../utils/db');
 
 const newBillJoiSchema = joi.object({
     group_id: joi.number().min(1).required(),
@@ -37,47 +36,50 @@ router.get('/:id?', verifyToken, (req, res) => {
 });
 
 router.post('/', verifyToken, async (req, res) => {
+    const group_id = Number(req.body?.group_id);
+    if (isNaN(group_id) || group_id < 1) {
+        return res.redirect('/accounts');
+    }
+
     const [validatedData, validatorError] = await joiValidator(
         newBillJoiSchema,
         req.body
     );
 
     if (validatorError) {
-        res.redirect(
-            `/bills/${validatedData.group_id}?error=${encodeURIComponent(
-                validatorError
-            )}`
+        return res.redirect(
+            `/bills/${group_id}?error=${encodeURIComponent(validatorError)}`
         );
-    } else {
-        sqlConnect(
-            'execute',
-            `INSERT INTO bills (group_id, amount, description) VALUES (?, ?, ?)`,
-            [
-                validatedData.group_id,
-                validatedData.amount,
-                validatedData.description,
-            ]
-        )
-            .then(([added]) => {
-                if (!added?.affectedRows) {
-                    res.redirect(
-                        `/bills/${
-                            validatedData.group_id
-                        }?error=${encodeURIComponent('Bill failed to add')}`
-                    );
-                } else {
-                    res.redirect(`/bills/${validatedData.group_id}?added=1`);
-                }
-            })
-            .catch((err) => {
-                console.log(err)
+    }
+
+    sqlConnect(
+        'execute',
+        `INSERT INTO bills (group_id, amount, description) VALUES (?, ?, ?)`,
+        [
+            validatedData.group_id,
+            validatedData.amount,
+            validatedData.description,
+        ]
+    )
+        .then(([added]) => {
+            if (!added?.affectedRows) {
                 res.redirect(
                     `/bills/${
                         validatedData.group_id
-                    }?error=${encodeURIComponent('Internal Error')}`
+                    }?error=${encodeURIComponent('Bill failed to add')}`
                 );
-            });
-    }
+            } else {
+                res.redirect(`/bills/${validatedData.group_id}?added=1`);
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            res.redirect(
+                `/bills/${validatedData.group_id}?error=${encodeURIComponent(
+                    'Internal Error'
+                )}`
+            );
+        });
 });
 
 module.exports = router;

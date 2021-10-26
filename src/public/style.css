@@ -12,6 +12,7 @@ body {
     background-color: rgb(77, 69, 0);
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     min-height: 100vh;
+    min-width: 400px;
 }
 
 .logo {
@@ -31,7 +32,8 @@ body {
     padding: 10px;
 }
 
-input, select {
+input,
+select {
     padding: 5px;
     border-radius: 5px;
     border: 1px solid rgb(202, 202, 202);
@@ -68,12 +70,16 @@ input, select {
 
 input[type='submit'],
 input[type='buttom'] {
-    cursor: pointer;
     border: none;
 }
 
-input[type='submit']:hover,
-input[type='buttom']:hover {
+input[type='submit']:not(:disabled),
+input[type='buttom']:not(:disabled) {
+    cursor: pointer;
+}
+
+input[type='submit']:hover:not(:disabled),
+input[type='buttom']:hover:not(:disabled) {
     background-color: rgb(155, 100, 0);
     color: white;
 }
@@ -84,8 +90,10 @@ input[type='buttom']:hover {
     color: white;
 }
 
-a, a:active, a:visited {
-    color: rgb(109, 71, 0);
+a,
+a:active,
+a:visited {
+    color: black;
 }
 
 .card {
@@ -97,6 +105,15 @@ a, a:active, a:visited {
     text-align: center;
     font-size: 2rem;
     display: block;
+    width: 200px;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
 }
 
 .card {
@@ -105,10 +122,11 @@ a, a:active, a:visited {
 
 hr {
     margin: 10px 0;
+    border-color: black;
 }
 
 option:disabled {
-    color: grey
+    color: grey;
 }
 
 option {
@@ -118,12 +136,48 @@ option {
 
 table {
     width: 100%;
+    border-collapse: collapse;
 }
 
+tr,
 th {
+    padding: 5px;
+    font-size: 1.2rem;
+}
+
+thead > tr {
     background-color: grey;
 }
 
-td {
-   background-color: white; 
+tbody > tr {
+    background-color: white;
+}
+
+tbody > tr:nth-child(even) {
+    background-color: rgb(216, 216, 216);
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.text-left {
+    text-align: left;
+}
+
+main > .container {
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border: 1px solid black;
+}
+
+header.container {
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+
+@media only screen and (max-width: 600px) {
+    .w-500 {
+        width: 100%;
+    }
 }

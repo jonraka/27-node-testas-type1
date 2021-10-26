@@ -9,13 +9,27 @@
             class="d-flex flex-column mw-500 mg-center"
         >
             <label for="fullname" class="mg-top-5">Full name</label>
-            <input type="text" name="fullname" id="fullname" />
+            <input type="text" name="fullname" id="fullname" required />
             <label for="email" class="mg-top-5">Email</label>
-            <input type="email" name="email" id="email" />
+            <input type="email" name="email" id="email" required />
             <label for="password" class="mg-top-5">Password</label>
-            <input type="password" name="password" id="password" />
+            <input
+                type="password"
+                name="password"
+                id="password"
+                minlength="5"
+                maxlength="50"
+                required
+            />
             <label for="password2" class="mg-top-5">Repeat password</label>
-            <input type="password" name="password2" id="password2" />
+            <input
+                type="password"
+                name="password2"
+                id="password2"
+                minlength="5"
+                maxlength="50"
+                required
+            />
             <input type="submit" value="Register" class="mg-top-5" />
             <p>Or <a href="login">Sign in</a></p>
             <div id="warnings" class="warning mg-top-5"></div>
@@ -33,31 +47,37 @@
     const password2El = document.getElementById('password2');
     const warningsEl = document.getElementById('warnings');
 
-    fullnameEl.value = sessionStorage.getItem('register_fullname') || '';
-    emailEl.value = sessionStorage.getItem('register_email') || '';
-
     const urlParams = new URLSearchParams(window.location.search);
     const errorParam = urlParams.get('error');
-    if (errorParam) warningsEl.innerText = errorParam;
+    if (errorParam) {
+        warningsEl.innerText = errorParam;
+        fullnameEl.value = sessionStorage.getItem('register_fullname') || '';
+        emailEl.value = sessionStorage.getItem('register_email') || '';
+    }
 
     formEl.addEventListener('submit', (e) => {
         e.preventDefault();
         const errors = [];
+
         if (
             fullnameEl.value.length < 3 ||
             !/[a-zA-Z]+ [a-zA-Z]+/.test(fullnameEl.value)
-        )
+        ) {
             errors.push('Invalid name, must be first and last name');
-        if (emailEl.value.length < 4 || !emailRegex.test(emailEl.value))
+        }
+        if (emailEl.value.length < 4 || !emailRegex.test(emailEl.value)) {
             errors.push('Invalid email');
-        if (passwordEl.value.length < 5 || passwordEl.value > 50)
+        }
+        if (passwordEl.value.length < 5 || passwordEl.value.length > 50) {
             errors.push('Invalid password, must be between 5 and 50');
-        if (passwordEl.value !== password2El.value)
+        }
+        if (passwordEl.value !== password2El.value) {
             errors.push('Passwords does not match');
+        }
 
-        warningsEl.innerText = errors.join('\n');
-
-        if (!errors.length) {
+        if (errors.length) {
+            warningsEl.innerText = errors.join('\n');
+        } else {
             sessionStorage.setItem('register_fullname', fullnameEl.value);
             sessionStorage.setItem('register_email', emailEl.value);
             formEl.submit();
